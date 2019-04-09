@@ -15,9 +15,9 @@ class Odometry:
     def __init__(self):
         """Constructor.
         """
-        self.x = 1
-        self.y = 0.5
-        self.theta = 0
+        self.x = 2.5
+        self.y = 1
+        self.theta = math.pi/2
 
         self.last_left_encoder_counts = None
         self.last_right_encoder_counts = None

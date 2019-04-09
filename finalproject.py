@@ -23,7 +23,7 @@ class Run:
         # self.virtual_create = factory.create_virtual_create("192.168.1.XXX")
         self.odometry = odometry.Odometry()
         self.map = lab8_map.Map("lab8_map.json")
-        self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
+        # self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
         self.pidDistance = pid_controller.PIDController(1000, 0, 50, [0, 0], [-200, 200], is_angle=False)
 
         # TODO identify good PID controller gains
@@ -90,8 +90,7 @@ class Run:
             data.extend([particle.x, particle.y, 0.1, particle.theta])
         self.virtual_create.set_point_cloud(data)
 
-    def goto(self):
-        waypoints = [[1.5,2.75]]
+    def goto(self, waypoints):
         index = 0
 
         goal_x = waypoints[index][0]
@@ -114,7 +113,7 @@ class Run:
                 check = (abs(goal_y) - abs(self.odometry.y) + abs(goal_x) - abs(self.odometry.x))
                 if abs(check) < .05:
                     index += 1
-                    if index == 1:
+                    if index == len(waypoints):
                         self.create.drive_direct(0,0)
                         break
                     # update the robots new goal
@@ -149,8 +148,10 @@ class Run:
         # self.virtual_create.enable_buttons()
         # self.visualize()
 
-
-        self.goto()
+        # hardcoded position for robot to go near arm
+        waypoints = [[.4, 1.6]]
+        self.goto(waypoints)
+        self.go_to_angle(math.pi)
 
 
         while True:
