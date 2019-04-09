@@ -70,7 +70,6 @@ class Run:
         if theta2 < -math.pi / 2.0 or theta2 > math.pi / 2.0 or theta1 < -math.pi / 2.0 or theta1 > math.pi / 2.0:
             print("Not possible")
             return
-        self.arm.go_to(5, -math.pi/4)
         self.time.sleep(.2)
         self.arm.go_to(1, theta1)
         self.arm.go_to(3, theta2)
@@ -183,9 +182,18 @@ class Run:
         # self.go_to_angle(math.pi)
 
         self.arm.open_gripper()
-        self.inverse_kinematics(-0.55, 0.23)
-        self.inverse_kinematics(-0.62, 0.22)
+        self.arm.go_to(5, -math.pi/3)
+        self.time.sleep(1)
+        self.inverse_kinematics(-0.61, 0.23)
+        self.time.sleep(1)
+        self.inverse_kinematics(-0.67, 0.22)
+        self.time.sleep(1)
+        self.arm.go_to(5, -math.pi/5.5)
+        self.time.sleep(1)
         self.arm.close_gripper()
+        self.time.sleep(5)
+        self.arm.go_to(1, -math.pi/4)
+        self.time.sleep(1)
 
         while True:
             b = self.virtual_create.get_last_button()
