@@ -2,8 +2,41 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62871282-b329-4ca2-b8ea-f2f2c3f37393" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../FinalProject/FinalProject.ttt" beforeDir="false" afterPath="$PROJECT_DIR$/../FinalProject/FinalProject.ttt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/finalproject.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/lab8_map.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/lab8_map.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/odometry.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/particle_filter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pid_controller.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/create2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/factory.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/create2_driver.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/gpio.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/pwm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/servo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/robot/sonar.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/create2_vrep.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/kuka_lbr4p_vrep.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/servo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/sonar.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/simulation/time_helper.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/visualization/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/visualization/virtual_create.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/remoteApi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/remoteApi.dylib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/remoteApi.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/remoteApi_arm.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrep.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrepConst.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FinalProject/run.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/finalproject.py" beforeDir="false" afterPath="$PROJECT_DIR$/finalproject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab8&amp;9/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab8&amp;9/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,24 +46,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/particle_filter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="-76">
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/finalproject.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="524">
-              <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -77,8 +98,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="730" />
-    <option name="width" value="710" />
+    <option name="width" value="718" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -92,8 +112,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="FinalProject" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FinalProject" type="462c0819:PsiDirectoryNode" />
+              <item name="RoboticsFinalProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RoboticsFinalProject" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -135,17 +155,17 @@
       <option name="presentableId" value="Default" />
       <updated>1554773734430</updated>
       <workItem from="1554773735979" duration="3987000" />
+      <workItem from="1554780113958" duration="818000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3987000" />
+    <option name="totallyTimeSpent" value="4805000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.5224551" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13018598" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -159,7 +179,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32857144" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32738853" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -172,15 +192,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/particle_filter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pa2_solution.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -200,10 +211,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/finalproject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="524">
-          <caret line="196" lean-forward="true" selection-start-line="196" selection-end-line="196" />
+        <state relative-caret-position="2519">
+          <caret line="196" selection-start-line="196" selection-end-line="196" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/particle_filter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-76">
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

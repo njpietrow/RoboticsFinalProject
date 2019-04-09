@@ -1,78 +1,89 @@
 import numpy as np
-import math
 import scipy.stats
-from numpy.random import choice
-import copy
-
-
-class Particle:
-    def __init__(self, x, y, theta, ln_p):
-        self.x = x
-        self.y = y
-        self.theta = theta
-        self.ln_p = ln_p
 
 
 class ParticleFilter:
-    def __init__(self, map, num_particles, translation_variance, rotation_variance, measurement_variance):
-        self._particles = []
-        self._map = map
-        self._translation_variance = translation_variance
-        self._rotation_variance = rotation_variance
-        self._measurement_variance = measurement_variance
-        # sample possible states for particles uniformly
-        p = 1.0 / num_particles
-        for i in range(0, num_particles):
-            self._particles.append(Particle(
-                np.random.uniform(map.bottom_left[0], map.top_right[0]),
-                np.random.uniform(map.bottom_left[1], map.top_right[1]),
-                # choice([-math.pi, -math.pi/2, 0, math.pi/2]),
-                np.random.uniform(0, 2*math.pi),
-                # 0,
-                math.log(p)))
+    def __init__(self, num_particles=3000, sensor_sigma=0.1, the_map=None,
+                 cartesian_sigma=0.05, theta_sigma=np.pi/48.):
+        self.num_particles = num_particles
+        self.drawn_particles = 500
+        self.sensor_sigma = sensor_sigma
+        if the_map is None:
+            import lab8_map
+            the_map = lab8_map.Map("lab8_map.json")
+        self.map = the_map
+        self.cartesian_sigma = cartesian_sigma
+        self.theta_sigma = theta_sigma
 
-    def move_by(self, x, y, theta):
-        for particle in self._particles:
-            particle.x += x + np.random.normal(0.0, self._translation_variance)
-            particle.y += y + np.random.normal(0.0, self._translation_variance)
-            particle.theta += theta + np.random.normal(0.0, self._rotation_variance)
-            # bound check
-            particle.x = min(self._map.top_right[0], max(particle.x, self._map.bottom_left[0]))
-            particle.y = min(self._map.top_right[1], max(particle.y, self._map.bottom_left[1]))
-            particle.theta = math.fmod(particle.theta, 2 * math.pi)
-        # self.particles_for_map = self._particles
+        self.particles = (np.random.uniform(
+            low=self.num_particles * [0, 0, 0],
+            high=self.num_particles * [3, 3, 2 * np.pi])
+            .reshape(self.num_particles, 3))
 
-    def measure(self, z, servo_angle_in_rad):
-        for particle in self._particles:
-            # compute what the distance should be, if particle position is accurate
-            distance = self._map.closest_distance([particle.x, particle.y], particle.theta + servo_angle_in_rad)
-            print(particle.theta + servo_angle_in_rad)
-            print([particle.x, particle.y])
-            print(distance)
-            # compute the probability P[measured z | robot @ x]
-            p = scipy.stats.norm(distance, self._measurement_variance).pdf(z)
-            if p == 0:
-                p_measured_z_if_robot_at_x = float("-inf")
-            else:
-                p_measured_z_if_robot_at_x = math.log(p)
-            # compute the probability P[robot@x | measured]
-            #    NOTE: This is not a probability, since we don't know P[measured z]
-            #          Hence we normalize afterwards
-            particle.ln_p = p_measured_z_if_robot_at_x + particle.ln_p
-        # normalize probabilities (take P[measured z into account])
-        probabilities = np.array([particle.ln_p for particle in self._particles])
-        a = scipy.misc.logsumexp(probabilities)
-        probabilities -= a
-        for j in range(0, len(probabilities)):
-            self._particles[j].ln_p = probabilities[j]
+    def mean(self):
+        '''Compute the mean of the particle positions.
 
-        # resample
-        self._particles = choice(self._particles, len(self._particles), p=[math.exp(particle.ln_p) for particle in self._particles])
-        self._particles = [copy.copy(particle) for particle in self._particles]
-
-    def get_estimate(self):
-        weights = [math.exp(particle.ln_p) for particle in self._particles]
-        x = np.average([particle.x for particle in self._particles], weights=weights)
-        y = np.average([particle.y for particle in self._particles], weights=weights)
-        theta = np.average([particle.theta for particle in self._particles], weights=weights)
+        This is useful as an estimate of where the robot is.
+        '''
+        x, y, theta = self.particles.mean(0)
         return x, y, theta
+
+    def variance(self):
+        '''Compute the variance of the particle positions.
+
+        This is useful for estimating how certain the location estimate is.
+        '''
+        x, y, theta = self.particles.var(0)
+        return x, y, theta
+
+    def draw(self, virtual_create):
+        x, y, theta = self.particles.mean(0)
+        virtual_create.set_pose((x, y, 0.1), theta)
+
+        # The format is x,y,z,theta,x,y,z,theta,...
+        data = np.ones((self.drawn_particles, 4))
+        data[:, 0] = self.particles[:self.drawn_particles, 0]
+        data[:, 1] = self.particles[:self.drawn_particles, 1]
+        data[:, 2] = 0.1
+        data[:, 3] = self.particles[:self.drawn_particles, 2]
+        virtual_create.set_point_cloud(data.flatten())
+
+    def sense(self, measured_distance):
+        '''Update particles using a sonar measurement.
+        
+        Assumes the sonar is facing straight forward.'''
+        expected_distances = np.array([
+            self.map.closest_distance((self.particles[i, 0], self.particles[i, 1]),
+                                      self.particles[i, 2]) or 3.
+            for i in range(self.num_particles)])
+        # Baye's rule (in extremely simplified form).
+        p_s_o = scipy.stats.norm(measured_distance, self.sensor_sigma).pdf(expected_distances)
+        # Normalize to get a probability again.
+        p_s_o /= np.sum(p_s_o)
+        # Sample.
+        idx = np.random.choice(self.num_particles, self.num_particles, p=p_s_o)
+        # If the particles were *objects* (as opposed to elements in an numpy
+        # array), we would need to deepcopy here.
+        self.particles = self.particles[idx]
+
+    def turn(self, deltaTheta):
+        '''Record that the robot rotated by deltaTheta.'''
+        self.particles[:, 2] += deltaTheta
+        self.particles[:, 2] += np.random.normal(0, self.theta_sigma, self.num_particles)
+        self.particles[:, 2] = np.fmod(self.particles[:, 2], 2 * np.pi)
+
+        # Add x,y noise, even though we only turned.
+        self.particles[:, 0] += np.random.normal(0, self.cartesian_sigma, self.num_particles)
+        self.particles[:, 1] += np.random.normal(0, self.cartesian_sigma, self.num_particles)
+
+    def forward(self, distance):
+        '''Record that the robot moved (forward) by distance.'''
+        # Update x, y using *particle's* theta.
+        self.particles[:, 0] += distance * np.cos(self.particles[:, 2])
+        self.particles[:, 1] += distance * np.sin(self.particles[:, 2])
+
+        # Add noise.
+        self.particles[:, 0] += np.random.normal(0, self.cartesian_sigma, self.num_particles)
+        self.particles[:, 1] += np.random.normal(0, self.cartesian_sigma, self.num_particles)
+        self.particles[:, 2] += np.random.normal(0, self.theta_sigma, self.num_particles)
+        self.particles[:, 2] = np.fmod(self.particles[:, 2], 2 * np.pi)
