@@ -4,6 +4,7 @@ import odometry
 import pid_controller
 import lab8_map
 import particle_filter
+import pa2_solution
 
 import numpy as np
 
@@ -19,6 +20,7 @@ class Run:
         self.servo = factory.create_servo()
         self.sonar = factory.create_sonar()
         self.arm = factory.create_kuka_lbr4p()
+
         self.virtual_create = factory.create_virtual_create()
         # self.virtual_create = factory.create_virtual_create("192.168.1.XXX")
         self.odometry = odometry.Odometry()
@@ -47,6 +49,33 @@ class Run:
             t = self.time.time()
             if start + time_in_sec <= t:
                 break
+
+    def inverse_kinematics(self, x_i, z_i):
+        L1 = 0.4 # estimated using V-REP (joint2 - joint4)
+        L2 = 0.39 # estimated using V-REP (joint4 - joint6)
+        # Corrections for our coordinate system
+        z = z_i - 0.3105
+        x = -x_i
+        # compute inverse kinematics
+        r = math.sqrt(x*x + z*z)
+        alpha = math.acos((L1*L1 + L2*L2 - r*r) / (2*L1*L2))
+        theta2 = math.pi - alpha
+
+        beta = math.acos((r*r + L1*L1 - L2*L2) / (2*L1*r))
+        theta1 = math.atan2(x, z) - beta
+        print(theta1, theta2)
+        if theta2 < -math.pi / 2.0 or theta2 > math.pi / 2.0 or theta1 < -math.pi / 2.0 or theta1 > math.pi / 2.0:
+            theta2 = math.pi + alpha
+            theta1 = math.atan2(x, z) + beta
+        if theta2 < -math.pi / 2.0 or theta2 > math.pi / 2.0 or theta1 < -math.pi / 2.0 or theta1 > math.pi / 2.0:
+            print("Not possible")
+            return
+        self.arm.go_to(5, -math.pi/4)
+        self.time.sleep(.2)
+        self.arm.go_to(1, theta1)
+        self.arm.go_to(3, theta2)
+
+        print("Go to [{},{}], IK: [{} deg, {} deg]".format(x_i, z_i, math.degrees(theta1), math.degrees(theta2)))
 
     def go_to_angle(self, goal_theta):
         old_x = self.odometry.x
@@ -150,9 +179,13 @@ class Run:
 
         # hardcoded position for robot to go near arm
         waypoints = [[.4, 1.6]]
-        self.goto(waypoints)
-        self.go_to_angle(math.pi)
+        # self.goto(waypoints)
+        # self.go_to_angle(math.pi)
 
+        self.arm.open_gripper()
+        self.inverse_kinematics(-0.55, 0.23)
+        self.inverse_kinematics(-0.62, 0.22)
+        self.arm.close_gripper()
 
         while True:
             b = self.virtual_create.get_last_button()

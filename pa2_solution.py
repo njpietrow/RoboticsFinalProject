@@ -44,6 +44,7 @@ class Run:
 
         beta = math.acos((r*r + L1*L1 - L2*L2) / (2*L1*r))
         theta1 = math.atan2(x, z) - beta
+
         if theta2 < -math.pi / 2.0 or theta2 > math.pi / 2.0 or theta1 < -math.pi / 2.0 or theta1 > math.pi / 2.0:
             theta2 = math.pi + alpha
             theta1 = math.atan2(x, z) + beta
