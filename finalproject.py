@@ -174,8 +174,8 @@ class Run:
 
     def convertPath(self, path):
         toReturn = []
-        x_scale = 3.25 / 300
-        y_scale = 3 / 335
+        x_scale = 3 / 300
+        y_scale = 3 / 300
         for v in path:
             new_x = (v.x) * x_scale
             new_y = (300 - v.y) * y_scale
@@ -200,10 +200,7 @@ class Run:
             pyCreate2.Sensor.LeftEncoderCounts,
             pyCreate2.Sensor.RightEncoderCounts,
         ])
-        # TAKEN OUT SO NO RED ARROWS
-        # self.visualize()
-        # self.virtual_create.enable_buttons()
-        # self.visualize()
+
 
         # hardcoded position for robot to go near arm
         # waypoints = [[.4, 1.6]]
@@ -225,54 +222,55 @@ class Run:
         # self.arm.go_to(1, -math.pi/4)
         # self.time.sleep(1)
 
-        # self.update_odom()
-        # self.pf.draw(self.virtual_create)
-        # turns_since_wall = 0
-        # turn_angle = np.pi / 15.
-        # while True:
-        #     if (np.array(self.pf.variance()) < np.array([0.02, 0.02, np.pi * 2 / 3])).any():
-        #         self.localized_x, self.localized_y, self.localized_theta = self.pf.mean()
-        #         break
-        #     print('mean', self.pf.mean())
-        #     print('variance', self.pf.variance())
-        #     self.turn(turn_angle)
-        #     dist = self.sense()
-        #
-        #     if dist > .7:
-        #         # We "didn't see a wall."
-        #         turns_since_wall += 1
-        #     else:
-        #         # We "saw a wall."
-        #         turns_since_wall = 0
-        #
-        #     # No wall for three steps, turn back one step and move through the "middle".
-        #     if turns_since_wall > 3:
-        #         self.turn(-turn_angle)
-        #         self.sense()
-        #         self.forward(0.5)
-        #         self.sense()
-        #         turns_since_wall -= 1
-        #
-        #     self.pf.draw(self.virtual_create)
-        #     self.time.sleep(0.01)
+        self.update_odom()
+        self.pf.draw(self.virtual_create)
+        turns_since_wall = 0
+        turn_angle = np.pi / 15.
+        while True:
+            if (np.array(self.pf.variance()) < np.array([0.02, 0.02, np.pi * 2 / 3])).any():
+                self.localized_x, self.localized_y, self.localized_theta = self.pf.mean()
+                break
+            print('actual ', self.odometry.x,self.odometry.y,self.odometry.theta)
+            print('mean', self.pf.mean())
+            print('variance', self.pf.variance())
+            self.turn(turn_angle)
+            dist = self.sense()
 
+            if dist > .7:
+                # We "didn't see a wall."
+                turns_since_wall += 1
+            else:
+                # We "saw a wall."
+                turns_since_wall = 0
 
-        # TODO use localized position to create RRTree
-        # TODO need to pass in position to RRTree constructor
-        # self.map.draw_line((100, 250), (170, 30), (255, 0, 0))
+            # No wall for three steps, turn back one step and move through the "middle".
+            if turns_since_wall > 3:
+                self.turn(-turn_angle)
+                self.sense()
+                self.forward(0.5)
+                self.sense()
+                turns_since_wall -= 1
+
+            self.pf.draw(self.virtual_create)
+            self.time.sleep(0.01)
+
+        new_x = int((self.localized_x) * 100)
+        new_y = int(300 - (self.localized_y*100))
+        print('currpos ', new_x,new_y)
+
+        self.RRTree.vertices.append(vertex.vertex(int(new_x),int(new_y)))
+        print(self.map.has_obstacle(new_x,new_y))
+
         for i in range(2000):
             #generate random x
             x_pos = random.randint(0,299)
             y_pos = random.randint(0,299)
             randompoint = vertex.vertex(x_pos,y_pos)
-            # print(x_pos,y_pos)
             closest = self.RRTree.find_nearest(randompoint)
-            print(closest.x,closest.y)
             actual = self.RRTree.place_point(closest, randompoint)
             if actual is None:
                 continue
             if closest.getDistance(actual.x, actual.y) < self.RRTree.delta:
-                print("less than delta")
                 continue
             else:
                 print("adding point", i)
@@ -293,6 +291,18 @@ class Run:
             else:
                 break
         self.map.save("pathFP.png")
+
+        for i in path:
+            print(i.x, i.y)
+        path = self.convertPath(path)
+        print("-------")
+        for i in path:
+            print(i.x, i.y)
+        waypoints = []
+        for i in path:
+            waypoints.append([i.x, i.y])
+
+        self.goto(waypoints)
 
 
         # while True:

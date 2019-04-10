@@ -6,7 +6,7 @@ class RRTree:
     def __init__(self, delta, lab10map):
         self.vertices = []
         # starting point defined below
-        self.vertices.append(vertex.vertex(100,250))
+
         self.map = lab10map
         self.pairs = []
         self.delta = delta
@@ -27,6 +27,7 @@ class RRTree:
         x_array = numpy.linspace(vertex1.x, vertex2.x, 800, dtype=numpy.int)
         y_array = numpy.linspace(vertex1.y, vertex2.y, 800, dtype=numpy.int)
         for i in range(800):
+            # print(i)
             if self.map.has_obstacle(int(x_array[i]), int(y_array[i])):
                 if i >= 1:
                     return vertex.vertex(x_array[i - 1], y_array[i - 1])
