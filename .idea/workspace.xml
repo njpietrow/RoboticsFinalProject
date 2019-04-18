@@ -34,10 +34,8 @@
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrep.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrepConst.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/run.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DirectionMap.png" beforeDir="false" afterPath="$PROJECT_DIR$/DirectionMap.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/finalproject.py" beforeDir="false" afterPath="$PROJECT_DIR$/finalproject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/particle_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/particle_filter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pathFP.png" beforeDir="false" afterPath="$PROJECT_DIR$/pathFP.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/lab10.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/lab10_map.py" beforeDir="false" />
@@ -55,8 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/finalproject.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="246" column="26" selection-start-line="246" selection-start-column="26" selection-end-line="246" selection-end-column="26" />
+            <state relative-caret-position="131">
+              <caret line="290" column="29" selection-start-line="290" selection-start-column="29" selection-end-line="290" selection-end-column="29" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
                 <element signature="e#2283#3354#0" />
@@ -65,7 +63,21 @@
                 <element signature="e#4117#4288#0" />
                 <element signature="e#4331#4757#0" />
                 <element signature="e#6696#7092#0" />
+                <element signature="e#6699#6876#0" />
+                <element signature="e#6911#7418#0" />
+                <element signature="e#7479#7604#0" />
+                <element signature="e#7660#7781#0" />
+                <element signature="e#7822#8146#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pid_controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="48" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -231,12 +243,12 @@
       <workItem from="1554780113958" duration="818000" />
       <workItem from="1554838796262" duration="3794000" />
       <workItem from="1554923520058" duration="4426000" />
-      <workItem from="1555550808741" duration="4958000" />
+      <workItem from="1555550808741" duration="5937000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17983000" />
+    <option name="totallyTimeSpent" value="18962000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
@@ -406,13 +418,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pid_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="48" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DirectionMap.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/finalproject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="246" column="26" selection-start-line="246" selection-start-column="26" selection-end-line="246" selection-end-column="26" />
+        <state relative-caret-position="131">
+          <caret line="290" column="29" selection-start-line="290" selection-start-column="29" selection-end-line="290" selection-end-column="29" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
             <element signature="e#2283#3354#0" />
@@ -421,6 +440,11 @@
             <element signature="e#4117#4288#0" />
             <element signature="e#4331#4757#0" />
             <element signature="e#6696#7092#0" />
+            <element signature="e#6699#6876#0" />
+            <element signature="e#6911#7418#0" />
+            <element signature="e#7479#7604#0" />
+            <element signature="e#7660#7781#0" />
+            <element signature="e#7822#8146#0" />
           </folding>
         </state>
       </provider>

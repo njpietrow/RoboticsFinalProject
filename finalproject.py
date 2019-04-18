@@ -32,7 +32,7 @@ class Run:
         self.map = lab10_map.Map("configuration_space.png")
 
         self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
-        self.pidDistance = pid_controller.PIDController(1000, 0, 50, [0, 0], [-200, 200], is_angle=False)
+        self.pidDistance = pid_controller.PIDController(300, 0, 20, [0, 0], [-200, 200], is_angle=False)
         # self.pidTheta = pid_controller.PIDController(200, 0, 100, [-10, 10], [-50, 50], is_angle=True)
         self.rrt = rrt.RRT(self.map)
 
@@ -168,6 +168,50 @@ class Run:
             toReturn.insert(0, new_vertex)
         return toReturn
 
+    def goToZero(self, arm, starting):
+        for i in range(200):
+            self.arm.go_to(arm, 0 + ((200 - i) / 200) * starting)
+            self.time.sleep(.01)
+        self.arm.go_to(arm, 0)
+        self.time.sleep(1)
+
+    def pickUpCup(self):
+        self.arm.open_gripper()
+        self.arm.go_to(5, -math.pi / 3)
+        self.time.sleep(1)
+        self.inverse_kinematics(-0.61, 0.23)
+        self.time.sleep(1)
+        self.inverse_kinematics(-0.67, 0.20)
+        self.time.sleep(1)
+        self.arm.go_to(5, -math.pi / 5.5)
+        self.time.sleep(1)
+        self.arm.close_gripper()
+        self.time.sleep(5)
+        self.goToZero(1, math.pi / 2.7)
+        self.goToZero(3, math.pi / 3)
+        self.goToZero(5, -math.pi / 6)
+        self.time.sleep(1)
+
+    def goFromZero(self, arm, ending, iterations):
+        for i in range(iterations):
+            self.arm.go_to(arm, ((i + 1) / iterations) * ending)
+            self.time.sleep(.01)
+
+    def goToFrom(self, arm, start, end, its):
+        for i in range(its):
+            self.arm.go_to(arm, start + (end - start) * (i / its))
+            self.time.sleep(0.01)
+
+    def placeCup(self, shelf):
+        if shelf == 2:
+            self.goFromZero(2, math.pi / 2, 100)
+            self.goFromZero(3, -math.pi / 2.5, 100)
+            self.goToFrom(2, math.pi / 2, math.pi / 6, 100)
+            self.goToFrom(5, 0, -math.pi / 9, 10)
+            self.time.sleep(5)
+            self.arm.open_gripper()
+            self.time.sleep(10)
+
     def run(self):
         self.create.start()
         self.create.safe()
@@ -208,7 +252,7 @@ class Run:
         # self.time.sleep(1)
 
         self.rrt.build((100, 250), 2000, 10)
-        x_goal = self.rrt.nearest_neighbor((165, 50))
+        x_goal = self.rrt.nearest_neighbor((165, 75))
         path = self.rrt.shortest_path(x_goal)
 
         for v in self.rrt.T:
@@ -244,9 +288,13 @@ class Run:
                     self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
                     if distance < 0.05:
                         break
-        self.goto([[1.65,2.5]])
+        self.goto([[1.58,2.51]])
         self.go_to_angle(math.pi/2)
-        self.time.sleep(6)
+        self.time.sleep(5)
+
+        self.pickUpCup()
+        self.placeCup(2)
+        self.time.sleep(4)
 
         # while True:
         #     b = self.virtual_create.get_last_button()
