@@ -6,7 +6,7 @@ import lab8_map
 import particle_filter
 import pa2_solution
 import lab10_map
-import RRTree
+import rrt
 import vertex
 import random
 
@@ -30,14 +30,11 @@ class Run:
         self.odometry = odometry.Odometry()
         # self.map = lab8_map.Map("lab8_map.json")
         self.map = lab10_map.Map("configuration_space.png")
-        self.RRTree = RRTree.RRTree(1, self.map)
-        # self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
-        self.pidDistance = pid_controller.PIDController(1000, 0, 50, [0, 0], [-200, 200], is_angle=False)
 
-        # TODO identify good PID controller gains
-        self.pidTheta = pid_controller.PIDController(200, 0, 100, [-10, 10], [-50, 50], is_angle=True)
-        # TODO identify good particle filter parameters
-        self.pf = particle_filter.ParticleFilter()
+        self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
+        self.pidDistance = pid_controller.PIDController(1000, 0, 50, [0, 0], [-200, 200], is_angle=False)
+        # self.pidTheta = pid_controller.PIDController(200, 0, 100, [-10, 10], [-50, 50], is_angle=True)
+        self.rrt = rrt.RRT(self.map)
 
         self.joint_angles = np.zeros(7)
 
@@ -129,6 +126,7 @@ class Run:
 
     def goto(self, waypoints):
         index = 0
+        base_speed = 0
 
         goal_x = waypoints[index][0]
         goal_y = waypoints[index][1]
@@ -140,28 +138,15 @@ class Run:
                 self.odometry.update(state.leftEncoderCounts, state.rightEncoderCounts)
                 goal_theta = math.atan2(goal_y - self.odometry.y, goal_x - self.odometry.x)
                 theta = math.atan2(math.sin(self.odometry.theta), math.cos(self.odometry.theta))
-                # print("[%.6f, %.6f, %.6f]" % (self.odometry.x, self.odometry.y, math.degrees(self.odometry.theta)))
-                # new_row = [self.time.time(), math.degrees(self.odometry.theta), math.degrees(goal_theta),
-                #            self.odometry.x, self.odometry.y]
-                # result = np.vstack([result, new_row])
-
                 output_theta = self.pidTheta.update(self.odometry.theta, goal_theta, self.time.time())
+                self.create.drive_direct(int(base_speed + output_theta), int(base_speed - output_theta))
+                # print("[{},{},{}]".format(self.odometry.x, self.odometry.y, math.degrees(self.odometry.theta)))
 
-                check = (abs(goal_y) - abs(self.odometry.y) + abs(goal_x) - abs(self.odometry.x))
-                if abs(check) < .05:
-                    index += 1
-                    if index == len(waypoints):
-                        self.create.drive_direct(0,0)
-                        break
-                    # update the robots new goal
-                    goal_x = waypoints[index][0]
-                    goal_y = waypoints[index][1]
-                    print(goal_x, goal_y)
-
-                # improved version 2: fuse with velocity controller
                 distance = math.sqrt(math.pow(goal_x - self.odometry.x, 2) + math.pow(goal_y - self.odometry.y, 2))
                 output_distance = self.pidDistance.update(0, distance, self.time.time())
                 self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
+                if distance < 0.02:
+                    break
 
     def go_to_angle(self, goal_theta):
         while math.fabs(math.atan2(
@@ -222,88 +207,46 @@ class Run:
         # self.arm.go_to(1, -math.pi/4)
         # self.time.sleep(1)
 
-        self.update_odom()
-        self.pf.draw(self.virtual_create)
-        turns_since_wall = 0
-        turn_angle = np.pi / 15.
-        while True:
-            if (np.array(self.pf.variance()) < np.array([0.02, 0.02, np.pi * 2 / 3])).any():
-                self.localized_x, self.localized_y, self.localized_theta = self.pf.mean()
-                break
-            print('actual ', self.odometry.x,self.odometry.y,self.odometry.theta)
-            print('mean', self.pf.mean())
-            print('variance', self.pf.variance())
-            self.turn(turn_angle)
-            dist = self.sense()
+        self.rrt.build((100, 250), 2000, 10)
+        x_goal = self.rrt.nearest_neighbor((165, 50))
+        path = self.rrt.shortest_path(x_goal)
 
-            if dist > .7:
-                # We "didn't see a wall."
-                turns_since_wall += 1
-            else:
-                # We "saw a wall."
-                turns_since_wall = 0
+        for v in self.rrt.T:
+            for u in v.neighbors:
+                self.map.draw_line((v.state[0], v.state[1]), (u.state[0], u.state[1]), (0, 0, 0))
+        for idx in range(0, len(path) - 1):
+            self.map.draw_line((path[idx].state[0], path[idx].state[1]),
+                               (path[idx + 1].state[0], path[idx + 1].state[1]), (255, 0, 0))
 
-            # No wall for three steps, turn back one step and move through the "middle".
-            if turns_since_wall > 3:
-                self.turn(-turn_angle)
-                self.sense()
-                self.forward(0.5)
-                self.sense()
-                turns_since_wall -= 1
+        self.map.save("DirectionMap.png")
 
-            self.pf.draw(self.virtual_create)
-            self.time.sleep(0.01)
+        self.odometry.x = 1
+        self.odometry.y = .5
+        self.odometry.theta = 0
+        base_speed = 50
 
-        new_x = int((self.localized_x) * 100)
-        new_y = int(300 - (self.localized_y*100))
-        print('currpos ', new_x,new_y)
+        for p in path:
+            goal_x = p.state[0] / 100.0
+            goal_y = 3 - p.state[1] / 100.0
+            print(goal_x, goal_y)
+            while True:
+                state = self.create.update()
+                if state is not None:
+                    self.odometry.update(state.leftEncoderCounts, state.rightEncoderCounts)
+                    goal_theta = math.atan2(goal_y - self.odometry.y, goal_x - self.odometry.x)
+                    theta = math.atan2(math.sin(self.odometry.theta), math.cos(self.odometry.theta))
+                    output_theta = self.pidTheta.update(self.odometry.theta, goal_theta, self.time.time())
+                    self.create.drive_direct(int(base_speed + output_theta), int(base_speed - output_theta))
+                    # print("[{},{},{}]".format(self.odometry.x, self.odometry.y, math.degrees(self.odometry.theta)))
 
-        self.RRTree.vertices.append(vertex.vertex(int(new_x),int(new_y)))
-        print(self.map.has_obstacle(new_x,new_y))
-
-        for i in range(2000):
-            #generate random x
-            x_pos = random.randint(0,299)
-            y_pos = random.randint(0,299)
-            randompoint = vertex.vertex(x_pos,y_pos)
-            closest = self.RRTree.find_nearest(randompoint)
-            actual = self.RRTree.place_point(closest, randompoint)
-            if actual is None:
-                continue
-            if closest.getDistance(actual.x, actual.y) < self.RRTree.delta:
-                continue
-            else:
-                print("adding point", i)
-                self.RRTree.vertices.append(actual)
-                self.RRTree.pairs.append((actual, closest))
-                actual.parent = closest
-
-        self.RRTree.draw(self.RRTree.pairs)
-        print(len(self.RRTree.vertices))
-
-        solution = self.RRTree.find_nearest(self.RRTree.goal)
-        path = []
-        while True:
-            if solution.parent is not None:
-                self.map.draw_line((solution.x, solution.y), (solution.parent.x, solution.parent.y), (0, 0, 255))
-                path.append(solution)
-                solution = solution.parent
-            else:
-                break
-        self.map.save("pathFP.png")
-
-        for i in path:
-            print(i.x, i.y)
-        path = self.convertPath(path)
-        print("-------")
-        for i in path:
-            print(i.x, i.y)
-        waypoints = []
-        for i in path:
-            waypoints.append([i.x, i.y])
-
-        self.goto(waypoints)
-
+                    distance = math.sqrt(math.pow(goal_x - self.odometry.x, 2) + math.pow(goal_y - self.odometry.y, 2))
+                    output_distance = self.pidDistance.update(0, distance, self.time.time())
+                    self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
+                    if distance < 0.05:
+                        break
+        self.goto([[1.65,2.5]])
+        self.go_to_angle(math.pi/2)
+        self.time.sleep(6)
 
         # while True:
         #     b = self.virtual_create.get_last_button()

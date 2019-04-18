@@ -9,8 +9,8 @@ class ParticleFilter:
         self.drawn_particles = 500
         self.sensor_sigma = sensor_sigma
         if the_map is None:
-            import lab8_map
-            the_map = lab8_map.Map("lab8_map.json")
+            import lab10_map
+            the_map = lab10_map.Map("lab10_map.json")
         self.map = the_map
         self.cartesian_sigma = cartesian_sigma
         self.theta_sigma = theta_sigma
