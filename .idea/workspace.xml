@@ -34,6 +34,7 @@
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrep.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrepConst.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/run.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DirectionMap.png" beforeDir="false" afterPath="$PROJECT_DIR$/DirectionMap.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/finalproject.py" beforeDir="false" afterPath="$PROJECT_DIR$/finalproject.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" afterDir="false" />
@@ -53,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/finalproject.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="290" column="29" selection-start-line="290" selection-start-column="29" selection-end-line="290" selection-end-column="29" />
+            <state relative-caret-position="459">
+              <caret line="297" column="24" selection-start-line="297" selection-start-column="24" selection-end-line="297" selection-end-column="24" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
                 <element signature="e#2283#3354#0" />
@@ -63,11 +64,6 @@
                 <element signature="e#4117#4288#0" />
                 <element signature="e#4331#4757#0" />
                 <element signature="e#6696#7092#0" />
-                <element signature="e#6699#6876#0" />
-                <element signature="e#6911#7418#0" />
-                <element signature="e#7479#7604#0" />
-                <element signature="e#7660#7781#0" />
-                <element signature="e#7822#8146#0" />
               </folding>
             </state>
           </provider>
@@ -243,12 +239,12 @@
       <workItem from="1554780113958" duration="818000" />
       <workItem from="1554838796262" duration="3794000" />
       <workItem from="1554923520058" duration="4426000" />
-      <workItem from="1555550808741" duration="5937000" />
+      <workItem from="1555550808741" duration="6440000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18962000" />
+    <option name="totallyTimeSpent" value="19465000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
@@ -430,8 +426,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/finalproject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="290" column="29" selection-start-line="290" selection-start-column="29" selection-end-line="290" selection-end-column="29" />
+        <state relative-caret-position="459">
+          <caret line="297" column="24" selection-start-line="297" selection-start-column="24" selection-end-line="297" selection-end-column="24" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
             <element signature="e#2283#3354#0" />
@@ -440,11 +436,6 @@
             <element signature="e#4117#4288#0" />
             <element signature="e#4331#4757#0" />
             <element signature="e#6696#7092#0" />
-            <element signature="e#6699#6876#0" />
-            <element signature="e#6911#7418#0" />
-            <element signature="e#7479#7604#0" />
-            <element signature="e#7660#7781#0" />
-            <element signature="e#7822#8146#0" />
           </folding>
         </state>
       </provider>

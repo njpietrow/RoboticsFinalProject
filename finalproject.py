@@ -145,7 +145,7 @@ class Run:
                 distance = math.sqrt(math.pow(goal_x - self.odometry.x, 2) + math.pow(goal_y - self.odometry.y, 2))
                 output_distance = self.pidDistance.update(0, distance, self.time.time())
                 self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
-                if distance < 0.02:
+                if distance < 0.009:
                     break
 
     def go_to_angle(self, goal_theta):
@@ -211,6 +211,13 @@ class Run:
             self.time.sleep(5)
             self.arm.open_gripper()
             self.time.sleep(10)
+        else:
+            self.goFromZero(2, math.pi / 2, 100)
+            self.goFromZero(3, -math.pi / 1.78, 100)
+            self.goToFrom(2, math.pi / 2, math.pi / 5, 100)
+            self.time.sleep(5)
+            self.arm.open_gripper()
+            self.time.sleep(10)
 
     def run(self):
         self.create.start()
@@ -267,7 +274,7 @@ class Run:
         self.odometry.x = 1
         self.odometry.y = .5
         self.odometry.theta = 0
-        base_speed = 50
+        base_speed = 100
 
         for p in path:
             goal_x = p.state[0] / 100.0
@@ -288,8 +295,9 @@ class Run:
                     self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
                     if distance < 0.05:
                         break
-        self.goto([[1.58,2.51]])
-        self.go_to_angle(math.pi/2)
+                        
+        self.goto([[1.654,2.420]])
+        self.go_to_angle(-.2)
         self.time.sleep(5)
 
         self.pickUpCup()
