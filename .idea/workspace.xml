@@ -34,10 +34,8 @@
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrep.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/pyCreate2/vrep/vrepConst.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../FinalProject/run.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DirectionMap.png" beforeDir="false" afterPath="$PROJECT_DIR$/DirectionMap.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/finalproject.py" beforeDir="false" afterPath="$PROJECT_DIR$/finalproject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/particle_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/particle_filter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab1/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/lab10.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../lab1/lab10_map.py" beforeDir="false" />
@@ -52,11 +50,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/finalproject.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="286" column="69" selection-start-line="286" selection-start-column="69" selection-end-line="286" selection-end-column="69" />
+            <state relative-caret-position="189">
+              <caret line="286" column="82" selection-start-line="286" selection-start-column="82" selection-end-line="286" selection-end-column="82" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
                 <element signature="e#2110#3181#0" />
@@ -71,10 +69,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/particle_filter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
+            <state relative-caret-position="-652">
               <caret line="21" column="62" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -155,6 +153,7 @@
       <find>50</find>
       <find>json</find>
       <find>locali</find>
+      <find>forward</find>
       <find>closes</find>
     </findStrings>
   </component>
@@ -168,8 +167,8 @@
         <option value="$PROJECT_DIR$/lab10.py" />
         <option value="$PROJECT_DIR$/RRTree.py" />
         <option value="$PROJECT_DIR$/odometry.py" />
-        <option value="$PROJECT_DIR$/finalproject.py" />
         <option value="$PROJECT_DIR$/particle_filter.py" />
+        <option value="$PROJECT_DIR$/finalproject.py" />
       </list>
     </option>
   </component>
@@ -240,16 +239,15 @@
       <workItem from="1554838796262" duration="3794000" />
       <workItem from="1554923520058" duration="4426000" />
       <workItem from="1555550808741" duration="6625000" />
-      <workItem from="1555875698149" duration="3421000" />
+      <workItem from="1555875698149" duration="4445000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23071000" />
+    <option name="totallyTimeSpent" value="24095000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12088698" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -416,10 +414,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/particle_filter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-652">
+          <caret line="21" column="62" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/finalproject.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="286" column="69" selection-start-line="286" selection-start-column="69" selection-end-line="286" selection-end-column="69" />
+        <state relative-caret-position="189">
+          <caret line="286" column="82" selection-start-line="286" selection-start-column="82" selection-end-line="286" selection-end-column="82" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
             <element signature="e#2110#3181#0" />
@@ -429,16 +437,6 @@
             <element signature="e#7480#7605#0" />
             <element signature="e#7661#7782#0" />
             <element signature="e#7823#8422#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/particle_filter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="21" column="62" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

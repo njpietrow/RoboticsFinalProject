@@ -125,7 +125,7 @@ class Run:
 
     def goto(self, waypoints):
         index = 0
-        base_speed = 0
+        base_speed = 20
 
         goal_x = waypoints[index][0]
         goal_y = waypoints[index][1]
@@ -284,7 +284,7 @@ class Run:
         turns_since_wall = 0
         turn_angle = np.pi / 15.
         while True:
-            if (np.array(self.pf.variance()) < np.array([0.005, 0.005, np.pi * 2 / 3])).any():
+            if (np.array(self.pf.variance()) < np.array([0.005, 0.005, np.pi * .005])).any():
                 self.localized_x, self.localized_y, self.localized_theta = self.pf.mean()
                 break
             print('actual ', self.odometry.x, self.odometry.y, self.odometry.theta)
@@ -311,14 +311,14 @@ class Run:
             self.pf.draw(self.virtual_create)
             self.time.sleep(0.01)
 
-        new_x = int((self.localized_x) * 100)
-        new_y = int(300 - (self.localized_y * 100))
-        print('currpos ', new_x, new_y)
+        self.odometry.x = self.localized_x
+        self.odometry.y = self.localized_y
+        self.odometry.theta = self.localized_theta
 
 
-        self.goto([[1.654,2.480]])
+        self.goto([[1.654,2.44]])
         self.go_to_angle(0)
-        self.time.sleep(5)
+        self.time.sleep(1)
 
         self.pickUpCup()
         self.placeCup(2)
