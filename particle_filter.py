@@ -9,8 +9,8 @@ class ParticleFilter:
         self.drawn_particles = 500
         self.sensor_sigma = sensor_sigma
         if the_map is None:
-            import lab10_map
-            the_map = lab10_map.Map("configuration_space.png")
+            import lab8_map
+            the_map = lab8_map.Map("lab8_map.json")
         self.map = the_map
         self.cartesian_sigma = cartesian_sigma
         self.theta_sigma = theta_sigma
@@ -18,8 +18,8 @@ class ParticleFilter:
         self.ypos = ypos
 
         self.particles = (np.random.uniform(
-            low=self.num_particles * [xpos - .5, ypos - .5, -.5],
-            high=self.num_particles * [xpos + .5, ypos + .5, .5])
+            low=self.num_particles * [xpos - .5, ypos - .5, 0],
+            high=self.num_particles * [xpos + .5, 3, 2 * np.pi])
             .reshape(self.num_particles, 3))
 
     def mean(self):

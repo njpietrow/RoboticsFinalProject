@@ -27,6 +27,7 @@ class Run:
         self.virtual_create = factory.create_virtual_create()
         # self.virtual_create = factory.create_virtual_create("192.168.1.XXX")
         self.odometry = odometry.Odometry()
+        # self.map = lab8_map.Map("lab8_map.json")
         self.map = lab10_map.Map("configuration_space.png")
 
         self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
@@ -35,6 +36,11 @@ class Run:
         self.rrt = rrt.RRT(self.map)
 
         self.joint_angles = np.zeros(7)
+
+        # the position that the robot returns after localizing
+        self.localized_x = 0
+        self.localized_y = 0
+        self.localized_theta = math.pi / 2
 
     def sleep(self, time_in_sec):
         """Sleeps for the specified amount of time while keeping odometry up-to-date
@@ -269,12 +275,45 @@ class Run:
                     if distance < 0.05:
                         break
 
-        self.go_to_angle(0)
         # starting to use particle filter to localize here.
         start_x = path[-1].state[0] / 100
         start_y = 3 - path[-1].state[1] / 100
         self.pf = particle_filter.ParticleFilter(start_x, start_y)
         self.pf.draw(self.virtual_create)
+
+        turns_since_wall = 0
+        turn_angle = np.pi / 15.
+        while True:
+            if (np.array(self.pf.variance()) < np.array([0.005, 0.005, np.pi * 2 / 3])).any():
+                self.localized_x, self.localized_y, self.localized_theta = self.pf.mean()
+                break
+            print('actual ', self.odometry.x, self.odometry.y, self.odometry.theta)
+            print('mean', self.pf.mean())
+            print('variance', self.pf.variance())
+            self.turn(turn_angle)
+            dist = self.sense()
+
+            if dist > .7:
+                # We "didn't see a wall."
+                turns_since_wall += 1
+            else:
+                # We "saw a wall."
+                turns_since_wall = 0
+
+            # No wall for three steps, turn back one step and move through the "middle".
+            if turns_since_wall > 3:
+                self.turn(-turn_angle)
+                self.sense()
+                self.forward(0.5)
+                self.sense()
+                turns_since_wall -= 1
+
+            self.pf.draw(self.virtual_create)
+            self.time.sleep(0.01)
+
+        new_x = int((self.localized_x) * 100)
+        new_y = int(300 - (self.localized_y * 100))
+        print('currpos ', new_x, new_y)
 
 
         self.goto([[1.654,2.480]])
