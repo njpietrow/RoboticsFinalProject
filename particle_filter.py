@@ -3,21 +3,23 @@ import scipy.stats
 
 
 class ParticleFilter:
-    def __init__(self, num_particles=3000, sensor_sigma=0.1, the_map=None,
+    def __init__(self, xpos, ypos, num_particles=3000, sensor_sigma=0.1, the_map=None,
                  cartesian_sigma=0.05, theta_sigma=np.pi/48.):
         self.num_particles = num_particles
         self.drawn_particles = 500
         self.sensor_sigma = sensor_sigma
         if the_map is None:
             import lab10_map
-            the_map = lab10_map.Map("lab10_map.json")
+            the_map = lab10_map.Map("configuration_space.png")
         self.map = the_map
         self.cartesian_sigma = cartesian_sigma
         self.theta_sigma = theta_sigma
+        self.xpos = xpos
+        self.ypos = ypos
 
         self.particles = (np.random.uniform(
-            low=self.num_particles * [0, 0, 0],
-            high=self.num_particles * [3, 3, 2 * np.pi])
+            low=self.num_particles * [xpos - .5, ypos - .5, -.5],
+            high=self.num_particles * [xpos + .5, ypos + .5, .5])
             .reshape(self.num_particles, 3))
 
     def mean(self):

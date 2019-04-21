@@ -2,7 +2,6 @@ import pyCreate2
 import math
 import odometry
 import pid_controller
-import lab8_map
 import particle_filter
 import pa2_solution
 import lab10_map
@@ -28,7 +27,6 @@ class Run:
         self.virtual_create = factory.create_virtual_create()
         # self.virtual_create = factory.create_virtual_create("192.168.1.XXX")
         self.odometry = odometry.Odometry()
-        # self.map = lab8_map.Map("lab8_map.json")
         self.map = lab10_map.Map("configuration_space.png")
 
         self.pidTheta = pid_controller.PIDController(300, 5, 50, [-10, 10], [-200, 200], is_angle=True)
@@ -37,11 +35,6 @@ class Run:
         self.rrt = rrt.RRT(self.map)
 
         self.joint_angles = np.zeros(7)
-
-        # the position that the robot returns after localizing
-        self.localized_x = 0
-        self.localized_y = 0
-        self.localized_theta = math.pi / 2
 
     def sleep(self, time_in_sec):
         """Sleeps for the specified amount of time while keeping odometry up-to-date
@@ -237,27 +230,6 @@ class Run:
             pyCreate2.Sensor.RightEncoderCounts,
         ])
 
-
-        # hardcoded position for robot to go near arm
-        # waypoints = [[.4, 1.6]]
-        # self.goto(waypoints)
-        # self.go_to_angle(math.pi)
-
-        # TODO this is the code for picking up the cup
-        # self.arm.open_gripper()
-        # self.arm.go_to(5, -math.pi/3)
-        # self.time.sleep(1)
-        # self.inverse_kinematics(-0.61, 0.23)
-        # self.time.sleep(1)
-        # self.inverse_kinematics(-0.67, 0.22)
-        # self.time.sleep(1)
-        # self.arm.go_to(5, -math.pi/5.5)
-        # self.time.sleep(1)
-        # self.arm.close_gripper()
-        # self.time.sleep(5)
-        # self.arm.go_to(1, -math.pi/4)
-        # self.time.sleep(1)
-
         self.rrt.build((100, 250), 2000, 10)
         x_goal = self.rrt.nearest_neighbor((165, 75))
         path = self.rrt.shortest_path(x_goal)
@@ -283,6 +255,7 @@ class Run:
             while True:
                 state = self.create.update()
                 if state is not None:
+
                     self.odometry.update(state.leftEncoderCounts, state.rightEncoderCounts)
                     goal_theta = math.atan2(goal_y - self.odometry.y, goal_x - self.odometry.x)
                     theta = math.atan2(math.sin(self.odometry.theta), math.cos(self.odometry.theta))
@@ -295,9 +268,17 @@ class Run:
                     self.create.drive_direct(int(output_theta + output_distance), int(-output_theta + output_distance))
                     if distance < 0.05:
                         break
-                        
-        self.goto([[1.654,2.420]])
-        self.go_to_angle(-.2)
+
+        self.go_to_angle(0)
+        # starting to use particle filter to localize here.
+        start_x = path[-1].state[0] / 100
+        start_y = 3 - path[-1].state[1] / 100
+        self.pf = particle_filter.ParticleFilter(start_x, start_y)
+        self.pf.draw(self.virtual_create)
+
+
+        self.goto([[1.654,2.480]])
+        self.go_to_angle(0)
         self.time.sleep(5)
 
         self.pickUpCup()
